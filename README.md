@@ -12,6 +12,8 @@ It was devised in a hurry during the latest pandemic. It calls another webservic
 
 `auth_username_suffix`: str; when sending the HTTP Basic auth, append this suffix to the username (`""`)
 
+`domains`: Sequence[str]; list of available domains
+
 The service must have two endpoints, fulfilling the requirements as described below.
 
 ### Example Config
@@ -25,6 +27,7 @@ The service must have two endpoints, fulfilling the requirements as described be
         "cookie_auth_url": "http://resources.example.com/login",
         "cookie_name": "default_cookie_name",
         "auth_username_suffix": "",
+        "domains": ["example.com"]
     }
   }
 }

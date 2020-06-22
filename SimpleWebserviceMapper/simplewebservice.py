@@ -2,8 +2,10 @@ import base64
 import json
 import logging
 from json import JSONDecodeError
-
+from dataclasses import dataclass
+import dataclasses
 import requests
+from typing import Mapping, Any, Sequence, Tuple, Optional
 
 from interstate_love_song.mapping.base import *
 from interstate_love_song.settings import load_dict_into_dataclass
@@ -50,6 +52,8 @@ class SimpleWebserviceMapperSettings:
     cookie_auth_url: str = "changeme2"
     cookie_name: str = "default_cookie_name"
     auth_username_suffix: str = ""
+    domains: Sequence[str] = dataclasses.field(default_factory=lambda: [])
+
 
 
 class SimpleWebserviceMapper(Mapper):
@@ -105,6 +109,7 @@ class SimpleWebserviceMapper(Mapper):
         base_url: str,
         cookie_auth_endpoint: str,
         cookie_name: str,
+        domains: Sequence[str]
         use_query_parameter=False,
         auth_username_suffix: str = "",
     ):
@@ -125,6 +130,8 @@ class SimpleWebserviceMapper(Mapper):
         if cookie_name is None:
             raise ValueError("cookie_name cannot be None")
         self._cookie_name = cookie_name
+
+        self._domains = list(domains)
 
         if not isinstance(use_query_parameter, bool):
             raise ValueError("use_query_parameter must be a bool.")
@@ -201,6 +208,10 @@ class SimpleWebserviceMapper(Mapper):
             return MapperStatus.INTERNAL_ERROR, []
 
     @property
+    def domains(self):
+        return self._domains
+
+    @property
     def name(self):
         return "SimpleWebserviceMapper"
 
@@ -211,5 +222,6 @@ class SimpleWebserviceMapper(Mapper):
             settings.base_url,
             settings.cookie_auth_url,
             settings.cookie_name,
+            settings.domains,
             auth_username_suffix=settings.auth_username_suffix,
         )

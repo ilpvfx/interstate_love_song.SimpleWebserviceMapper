@@ -17,7 +17,6 @@ with open(version_path) as version_file:
     exec(version_file.read(), env)
     VERSION = env["VERSION"]
 
-setup_requires = []
 setup(
     name="interstate_love_song.SimpleWebserviceMapper",
     version=VERSION,
@@ -28,5 +27,7 @@ setup(
     entry_points={
         "interstate_love_song.plugins": "SimpleWebserviceMapper = SimpleWebserviceMapper"
     },
-    setup_requires=setup_requires,
+    install_requires = [
+        "interstate_love_song>=2,<3"
+    ]
 )
